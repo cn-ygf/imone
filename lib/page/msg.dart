@@ -22,10 +22,31 @@ class _MsgPageState extends State<MsgPage> {
         elevation:0.0,
         backgroundColor: Color.fromARGB(255, 246, 246, 246),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add),
-            color: Colors.blue,
-            onPressed: (){},
+          PopupMenuButton(
+            icon: Icon(Icons.add,color: Colors.blue,),
+            itemBuilder:(BuildContext context) =><PopupMenuItem<String>>[
+              PopupMenuItem(
+                value: 'mi',
+                child: ListTile(
+                  leading: Icon(Icons.chat),
+                  title: Text('密聊',style: TextStyle(color: Colors.black),),
+                ),
+              ),
+              PopupMenuItem(
+                value: 'scan',
+                child: ListTile(
+                  leading: Icon(Icons.scanner),
+                  title: Text('扫一扫',style: TextStyle(color: Colors.black),),
+                ),
+              ),
+              PopupMenuItem(
+                value: 'contacts',
+                child: ListTile(
+                  leading: Icon(Icons.people),
+                  title: Text('添加联系人',style: TextStyle(color: Colors.black),),
+                ),
+              ),
+            ],
           ),
         ],
       ),
