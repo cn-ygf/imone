@@ -7,9 +7,16 @@ class MePage extends StatefulWidget {
   MePage({Key key, this.title}) : super(key: key);
 
   final String title;
-
+  _MePageState _state;
+  // 更新用户信息
+  void updateInfo(){
+    _state.updateInfo();
+  }
   @override
-  _MePageState createState() => _MePageState();
+  _MePageState createState(){
+    _state = _MePageState();
+    return _state;
+  }
 
 }
 
@@ -17,14 +24,25 @@ class _MePageState extends State<MePage> {
   // 背景颜色
   var _itemBkColor;
 
+  var _member = {};
+
   @override
   void initState(){
     super.initState();
+    
     _itemBkColor = Colors.white;
+    _member = Member.member;
+  }
+
+  void updateInfo(){
+    setState(() {
+      _member = Member.member;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         title: Text('设置',textAlign: TextAlign.center,style: TextStyle(color: Colors.black),),
@@ -77,7 +95,7 @@ class _MePageState extends State<MePage> {
                           width: 55,
                           height: 55,
                           child: Image(
-                            image: NetworkImage('${Config.apiHost}images?hash=${Member.member["head"]}'),
+                            image: NetworkImage('${Config.apiHost}images?hash=${_member["head"]}'),
                             fit:BoxFit.cover,
                           ),
                         ),
@@ -90,11 +108,11 @@ class _MePageState extends State<MePage> {
                         Container(
                           height: 12,
                         ),
-                        Text(Member.member['nick'],textAlign: TextAlign.start,style: TextStyle(color: Colors.black,fontSize: 16),),
+                        Text(_member['nick'],textAlign: TextAlign.start,style: TextStyle(color: Colors.black,fontSize: 16),),
                         Container(height: 2,),
-                        Text(Member.member['email'],style: TextStyle(color: Color.fromARGB(255, 143, 143, 147),fontSize: 14),),
+                        Text(_member['email'],style: TextStyle(color: Color.fromARGB(255, 143, 143, 147),fontSize: 14),),
                         Container(height: 1,),
-                        Text(Member.member['phone'],style: TextStyle(color: Color.fromARGB(255, 143, 143, 147),fontSize: 14),),
+                        Text(_member['phone'],style: TextStyle(color: Color.fromARGB(255, 143, 143, 147),fontSize: 14),),
                       ],
                     ),
                     // 间隔

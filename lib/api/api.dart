@@ -3,10 +3,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:convert';
 import '../config/config.dart';
 import '../member/member.dart';
+import '../page/me.dart';
 
 class Api{
   // 获取用户信息
-  static void getMemberInfo(){
+  static void getMemberInfo(MePage mePage){
     String url = '${Config.apiHost}member/info?sessionkey=${Config.sessionKey}';
     http.get(url).then((reponse){
     var data = jsonDecode(reponse.body);
@@ -14,6 +15,10 @@ class Api{
     if(data['status'] == 'ok'){
       if(data['code'] == 10000){
         Member.member = data['member'];
+        if(mePage != null){
+          mePage.updateInfo();
+        }
+        
       }else{
         Fluttertoast.showToast(
           msg:"身份认证过期，请重新登录",
