@@ -3,9 +3,9 @@ import 'dart:io';
 import 'dart:convert';
 import 'app.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../common/md5.dart';
+import '../config/config.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key, this.title}) : super(key: key);
@@ -24,7 +24,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   // 是否禁用按钮
   bool _isButtonDisabled;
   // 服务器地址
-  String _server = 'http://192.168.0.104:9000/api/v1/';
+  String _server = Config.apiHost;
   // 表彰验证
   final _formKey = GlobalKey<FormState>();
   // 保存用户名和密码
@@ -144,15 +144,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                         });
                         login();
                       }
-                      
-                      return;
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (BuildContext context){
-                          return AppPage();
-                        }),
-                        (route)=>route == null
-                      );
                       return;
                       Socket.connect('www.baidu.com', 80).then((socket) async{
                         socket.transform(utf8.decoder).listen(debugPrint);
@@ -201,6 +192,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             print('debug:${rep.body}');
             if(data['status'] == 'ok'){
               if(data['code'] == 10000){
+                Config.sessionKey = data['sessionkey'];
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (BuildContext context){
@@ -224,7 +216,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           }).catchError((err){
             print('debug:$err');
             Fluttertoast.showToast(
-              msg:"连接服务器失败，请检查网络！1",
+              msg:"连接服务器失败，请检查网络！",
               toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.BOTTOM,
               timeInSecForIos: 1
@@ -252,7 +244,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     }).catchError((err){
       print('debug:$err');
       Fluttertoast.showToast(
-        msg:"连接服务器失败，请检查网络！2",
+        msg:"连接服务器失败，请检查网络！",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIos: 1

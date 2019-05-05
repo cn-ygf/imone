@@ -1,22 +1,31 @@
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:convert';
+import '../config/config.dart';
+import '../member/member.dart';
 
 class Api{
-  static String _server = 'http://192.168.0.104:9000/api/v1/';
-  // 登录接口
-  static String login(){
-    // 获取vfcode
-    String url = _server + 'vfcode';
-    http.get(url).then((response){
-      print('fuck');
-      if(response.statusCode == 200){
-        var data = jsonDecode(response.body);
-        if(data['status'] == 'ok'){
-          print(data['vfcode']);
-          print(data['vfsession']);
-        }
+  // 获取用户信息
+  static void getMemberInfo(){
+    String url = '${Config.apiHost}member/info?sessionkey=${Config.sessionKey}';
+    http.get(url).then((reponse){
+    var data = jsonDecode(reponse.body);
+    print('debug:${reponse.body}');
+    if(data['status'] == 'ok'){
+      if(data['code'] == 10000){
+        Member.member = data['member'];
+      }else{
+        Fluttertoast.showToast(
+          msg:"身份认证过期，请重新登录",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIos: 2
+        );
+        // TODO 返回登录页面
       }
+    }else{
+      print(url);
+    }
     }).catchError((err){
       print('debug:$err');
       Fluttertoast.showToast(
@@ -25,7 +34,6 @@ class Api{
         gravity: ToastGravity.BOTTOM,
         timeInSecForIos: 1
       );
-
     });
   }
 }

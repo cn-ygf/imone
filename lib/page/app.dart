@@ -3,10 +3,14 @@ import 'msg.dart';
 import 'contacts.dart';
 import 'cloud.dart';
 import 'me.dart';
+import '../api/api.dart';
 
 
 class AppPage extends StatefulWidget {
-  AppPage({Key key, this.title}) : super(key: key);
+  AppPage({Key key, this.title}) : super(key: key){
+    // 初始化网络请求
+    Api.getMemberInfo();
+  }
 
   final String title;
 
@@ -19,6 +23,8 @@ class _AppPageState extends State<AppPage> with SingleTickerProviderStateMixin  
   int _tabIndex = 0;
   // 保存主页面
   var _pageList;
+
+  
 
   @override
   void initState(){
@@ -63,6 +69,10 @@ class _AppPageState extends State<AppPage> with SingleTickerProviderStateMixin  
         currentIndex: _tabIndex,
         iconSize: 24.0,
         onTap: (index){
+          if(index == _tabIndex){
+            Api.getMemberInfo();
+            return;
+          }
           setState(() {
             _tabIndex = index;
           });

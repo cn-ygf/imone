@@ -1,7 +1,18 @@
 import 'package:flutter/material.dart';
 import '../config/config.dart';
 
-class MsgItem extends StatelessWidget {
+class ContactsItem extends StatelessWidget {
+
+  const ContactsItem({this.hash,this.nick,this.current})
+    : assert(hash != null),
+      assert(nick != null);
+  // 头像hash
+  final String hash;
+  // 昵称
+  final String nick;
+  // 状态
+  final String current;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -17,30 +28,28 @@ class MsgItem extends StatelessWidget {
                 width: 45,
                 height: 45,
                 child: Image(
-                  image: NetworkImage('${Config.apiHost}images?hash=0b5472d59d995f88ee2b4bc61ac1b668'),
+                  image: NetworkImage('${Config.apiHost}images?hash=${this.hash}'),
                   fit:BoxFit.cover,
                 ),
               ),
             ),
           ),
-          // 昵称消息和时间
+          // 昵称消息和状态
           Expanded(
             child: Column(
               children: <Widget>[
                 Container(height: 10,),
-                // 昵称 和时间
+                // 昵称
                 Row(
                   children: <Widget>[
-                    Text('小鱼人',style: TextStyle(color: Colors.black,fontSize: 16),),
+                    Text(this.nick,style: TextStyle(color: Colors.black,fontSize: 16),),
                     Expanded(child: Container(width: double.infinity,),),
-                    Text('昨天'),
-                    Container(width: 20,),
                   ],
                 ),
-                // 消息
+                // 状态
                 Container(
                   width: double.infinity,
-                  child: Text('[图片]明天去吃这个吗！',style: TextStyle(color: Color.fromARGB(255, 135, 139, 151)),),
+                  child: Text(this.current,style: TextStyle(color: Color.fromARGB(255, 135, 139, 151)),),
                 ),
                 // 间隔
                 Container(
